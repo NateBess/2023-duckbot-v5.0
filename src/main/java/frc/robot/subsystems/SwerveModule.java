@@ -86,7 +86,7 @@ public class SwerveModule {
         return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition()));
     }
 
-    // FIXME Use this is the correct places
+    // FIXME Created getModulePosition method for use throughout code base...
     public SwerveModulePosition getModulePosition() {
         return new SwerveModulePosition(driveEncoder.getPosition(), Rotation2d.fromDegrees(0));
     }
