@@ -54,12 +54,8 @@ public class SwerveModule {
         resetEncoders();
     }
 
-    // public double getDrivePosition() {
-    //     return driveEncoder.getPosition();
-    // }
-    // FIX ME here...
-    public SwerveModulePosition getDrivePosition() {
-        return new SwerveModulePosition(driveEncoder.getPosition(), null);
+    public double getDrivePosition() {
+        return driveEncoder.getPosition();
     }
 
     public double getTurningPosition() {
@@ -88,6 +84,11 @@ public class SwerveModule {
 
     public SwerveModuleState getState() {
         return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition()));
+    }
+
+    // FIXME Use this is the correct places
+    public SwerveModulePosition getModulePosition() {
+        return new SwerveModulePosition(driveEncoder.getPosition(), Rotation2d.fromDegrees(0));
     }
 
     public void setDesiredState(SwerveModuleState state) {
