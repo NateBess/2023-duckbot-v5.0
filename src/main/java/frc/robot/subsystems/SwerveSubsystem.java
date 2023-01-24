@@ -52,12 +52,13 @@ public class SwerveSubsystem extends SubsystemBase {
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
     // private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
     //         new Rotation2d(0), null);
+    //FIXME Placed the SwerveModulePosition's that I created in this spot...
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
             new Rotation2d(0), new SwerveModulePosition[] {
-                frontLeft.getDrivePosition(),
-                frontRight.getDrivePosition(),
-                backLeft.getDrivePosition(),
-                backRight.getDrivePosition()
+                frontLeft.getModulePosition(),
+                frontRight.getModulePosition(),
+                backLeft.getModulePosition(),
+                backRight.getModulePosition()
               });
 
     public SwerveSubsystem() {
@@ -88,16 +89,26 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void resetOdometry(Pose2d pose) {
         // odometer.resetPosition(pose, getRotation2d());
-        // FIX ME here...
-        odometer.resetPosition(getRotation2d(), null, pose);
+        // FIXME Placed the SwerveModulePosition's that I created in this spot...
+        odometer.resetPosition(getRotation2d(), new SwerveModulePosition[] {
+            frontLeft.getModulePosition(),
+            frontRight.getModulePosition(),
+            backLeft.getModulePosition(),
+            backRight.getModulePosition()
+          }, pose);
     }
 
     @Override
     public void periodic() {
         // odometer.update(getRotation2d(), frontLeft.getState(), frontRight.getState(), backLeft.getState(),
         //         backRight.getState());
-        // FIX ME here...
-        odometer.update(getRotation2d(), null);
+        // FIXME Placed the SwerveModulePosition's that I created in this spot...
+        odometer.update(getRotation2d(), new SwerveModulePosition[] {
+            frontLeft.getModulePosition(),
+            frontRight.getModulePosition(),
+            backLeft.getModulePosition(),
+            backRight.getModulePosition()
+          });
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
     }
@@ -111,7 +122,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         // SwerveDriveKinematics.normalizeWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
-        // FIX ME okay...
+        // FIXME Figure out how to get the current ChassisSpeed for an input in this method
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, null, getHeading(), getHeading(), getHeading());
         frontLeft.setDesiredState(desiredStates[0]);
         frontRight.setDesiredState(desiredStates[1]);
