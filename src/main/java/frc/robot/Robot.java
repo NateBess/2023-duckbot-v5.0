@@ -118,10 +118,10 @@ public class Robot extends TimedRobot {
             doubleSolenoidOne.set(kReverse);
           }
         
-        if (xbController.getLeftTriggerAxis() > 50) {
+        if (xbController.getAButtonPressed()) {
             doubleSolenoidTwo.set(kForward);
           }
-        if (xbController.getRightTriggerAxis() > 50) {
+        if (xbController.getBButtonPressed()) {
             doubleSolenoidTwo.set(kReverse);
           }
     }
