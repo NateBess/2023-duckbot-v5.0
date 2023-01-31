@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -35,13 +36,13 @@ public class SwerveModule {
         absoluteEncoder = new AnalogInput(absoluteEncoderId);
 
         driveMotor = new CANSparkMax(driveMotorId, MotorType.kBrushless);
-        turningMotor = new CANSparkMax(turningMotorId, MotorType.kBrushless);
+        turningMotor = new CANSparkMax(turningMotorId, MotorType.kBrushed);
 
         driveMotor.setInverted(driveMotorReversed);
         turningMotor.setInverted(turningMotorReversed);
 
         driveEncoder = driveMotor.getEncoder();
-        turningEncoder = turningMotor.getEncoder();
+        turningEncoder = turningMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 4096);
 
         driveEncoder.setPositionConversionFactor(ModuleConstants.kDriveEncoderRot2Meter);
         driveEncoder.setVelocityConversionFactor(ModuleConstants.kDriveEncoderRPM2MeterPerSec);
