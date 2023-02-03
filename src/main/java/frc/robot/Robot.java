@@ -43,6 +43,7 @@ public class Robot extends TimedRobot {
         // and put our
         // autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();
+
     }
 
     /**
@@ -120,10 +121,17 @@ public class Robot extends TimedRobot {
         
         if (xbController.getAButtonPressed()) {
             doubleSolenoidTwo.set(kForward);
+            
           }
         if (xbController.getBButtonPressed()) {
             doubleSolenoidTwo.set(kReverse);
           }
+        
+        if (xbController.getYButtonPressed()) {
+            doubleSolenoidTwo.set(kForward);
+            
+          }
+
     }
 
     @Override
