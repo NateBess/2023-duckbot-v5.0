@@ -47,7 +47,7 @@ public final class Constants {
 
         public static final boolean kFrontLeftDriveEncoderReversed = true;
         public static final boolean kBackLeftDriveEncoderReversed = true;
-        public static final boolean kFrontRightDriveEncoderReversed = false;
+        public static final boolean kFrontRightDriveEncoderReversed = true;
         public static final boolean kBackRightDriveEncoderReversed = true;
 
         public static final int kFrontLeftDriveAbsoluteEncoderPort = 3;
@@ -102,3 +102,6 @@ public final class Constants {
         public static final double kDeadband = 0.05;
     }
 }
+
+
+// Smardashb aord.printNumber

@@ -10,7 +10,8 @@
       "LiveWindow": {
         ".status": {
           "open": true
-        }
+        },
+        "open": true
       }
     },
     "types": {
@@ -19,9 +20,6 @@
   },
   "NetworkTables Info": {
     "Clients": {
-      "open": true
-    },
-    "Connections": {
       "open": true
     },
     "Dashboard": {
@@ -38,5 +36,8 @@
   "NetworkTables Settings": {
     "mode": "Client (NT4)",
     "serverTeam": "4181"
+  },
+  "NetworkTables View": {
+    "visible": false
   }
 }
