@@ -22,7 +22,7 @@ public class SwerveModule {
     private final CANSparkMax turningMotor;
 
     private final RelativeEncoder driveEncoder;
-    private final RelativeEncoder turningEncoder;
+    private final AnalogInput absoluteEncoderReal;
 
     private final PIDController turningPidController;
 
@@ -35,23 +35,20 @@ public class SwerveModule {
 
         this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
         this.absoluteEncoderReversed = absoluteEncoderReversed;
-        absoluteEncoder = new AnalogInput(absoluteEncoderId);
+        absoluteEncoderReal = new AnalogInput(absoluteEncoderId);
 
-        driveMotor = new CANSparkMax(driveMotorId, MotorType.kBrushless); // Both Drive and Turning motors were set to brushless.
-        // turningMotor = new CANSparkMax(driveMotorId, MotorType.kBrushless);
-        turningMotor = new CANSparkMax(turningMotorId, MotorType.kBrushed); // CHANGED to Brushed Motor.
+        driveMotor = new CANSparkMax(driveMotorId, MotorType.kBrushless);
+        turningMotor = new CANSparkMax(turningMotorId, MotorType.kBrushed); 
 
         driveMotor.setInverted(driveMotorReversed);
         turningMotor.setInverted(turningMotorReversed);
 
         driveEncoder = driveMotor.getEncoder();
-        turningEncoder = turningMotor.getEncoder(Type.kQuadrature, 4096);
-
 
         driveEncoder.setPositionConversionFactor(ModuleConstants.kDriveEncoderRot2Meter);
         driveEncoder.setVelocityConversionFactor(ModuleConstants.kDriveEncoderRPM2MeterPerSec);
-        turningEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderRot2Rad);
-        turningEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderRPM2RadPerSec);
+        absoluteEncoderReal.setPositionConversionFactor(ModuleConstants.kTurningEncoderRot2Rad);
+        absoluteEncoderReal.setVelocityConversionFactor(ModuleConstants.kTurningEncoderRPM2RadPerSec);
 
         turningPidController = new PIDController(ModuleConstants.kPTurning, 0, 0);
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
@@ -72,7 +69,7 @@ public class SwerveModule {
     }
 
     public double getTurningVelocity() {
-        return turningEncoder.getVelocity();
+        return absoluteEncoderReal.getVelocity();
     }
 
     public double getAbsoluteEncoderRad() {
@@ -84,7 +81,7 @@ public class SwerveModule {
 
     public void resetEncoders() {
         driveEncoder.setPosition(0);
-        turningEncoder.setPosition(getAbsoluteEncoderRad());
+        absoluteEncoderReal.setPosition(getAbsoluteEncoderRad());
     }
 
     public SwerveModuleState getState() {
@@ -93,6 +90,7 @@ public class SwerveModule {
 
     // FIXME Created getModulePosition method for use throughout code base...
     public SwerveModulePosition getModulePosition() {
+        // put the current angle of the wheel inside .fromDegrees(0);
         return new SwerveModulePosition(driveEncoder.getPosition(), Rotation2d.fromDegrees(0));
     }
 
