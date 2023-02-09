@@ -64,7 +64,7 @@ public class SwerveModule {
     }
 
     public double getTurningPosition() {
-        return turningEncoder.getPosition();
+        return absoluteEncoder.getValue();
     }
 
     public double getDriveVelocity() {

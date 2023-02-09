@@ -30,6 +30,10 @@ public final class Constants {
                 new Translation2d(-kWheelBase / 2, -kTrackWidth / 2),
                 new Translation2d(-kWheelBase / 2, kTrackWidth / 2));
 
+        // public static final double kDriveSpeedSlow = 0.25;
+        // public static final double kDriveSpeedNormal = 0.70;
+        // public static final double kDriveSpeedFast = 1.0;
+
         public static final int kFrontLeftDriveMotorPort = 7;
         public static final int kBackLeftDriveMotorPort = 5;
         public static final int kFrontRightDriveMotorPort = 1;

@@ -27,10 +27,20 @@ public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
 
     private RobotContainer m_robotContainer;
-    private XboxController xbController = new XboxController(0);
+    // private XboxController xbController = new XboxController(0);
+    private XboxController xbControllerTwo = new XboxController(1);
 
+    // Claw open and close.
     private DoubleSolenoid doubleSolenoidOne = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
+
+    // Level 1 Solenoid
     private DoubleSolenoid doubleSolenoidTwo = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
+
+    // Level 2 Solenoid
+    private DoubleSolenoid doubleSolenoidThree = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 4, 5);
+
+    // Level 3 Solenoid
+    //private DoubleSolenoid doubleSolenoidFour = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 6, 7);
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -112,27 +122,40 @@ public class Robot extends TimedRobot {
     // This is where you program buttons on the xbox controller...
     @Override
     public void teleopPeriodic() {
-        if (xbController.getLeftBumperPressed()) {
+        // Controller One "DRIVER"
+        // if (xbController.getLeftBumperPressed()) {
+        //     doubleSolenoidOne.set(kForward);
+        //   }
+        // if (xbController.getRightBumperPressed()) {
+        //     doubleSolenoidOne.set(kReverse);
+        //   }
+
+        // Controller Two "ARM Controller"
+
+        // Claw open / close if statements.
+        if (xbControllerTwo.getLeftBumperPressed()) {
             doubleSolenoidOne.set(kForward);
           }
-        if (xbController.getRightBumperPressed()) {
+        if (xbControllerTwo.getRightBumperPressed()) {
             doubleSolenoidOne.set(kReverse);
           }
         
-        if (xbController.getAButtonPressed()) {
+        // Level 1 & 2 Buttons
+        if (xbControllerTwo.getYButtonPressed()) {
             doubleSolenoidTwo.set(kForward);
+            doubleSolenoidThree.set(kForward);
             
           }
-        if (xbController.getBButtonPressed()) {
+        if (xbControllerTwo.getAButtonPressed()) {
             doubleSolenoidTwo.set(kReverse);
-          }
-        
-        if (xbController.getYButtonPressed()) {
-            doubleSolenoidTwo.set(kForward);
-            
+            doubleSolenoidThree.set(kReverse);
           }
 
-    }
+        if (xbControllerTwo.getBButtonPressed()) {
+            doubleSolenoidTwo.set(kReverse);
+            doubleSolenoidThree.set(kForward);
+        }
+        }
 
     @Override
     public void testInit() {
