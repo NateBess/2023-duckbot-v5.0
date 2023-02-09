@@ -10,7 +10,7 @@ public final class Constants {
     public static final class ModuleConstants {
         public static final double kWheelDiameterMeters = Units.inchesToMeters(4);
         public static final double kDriveMotorGearRatio = 1 / 6.67; // 1 / 5.8462;
-        public static final double kTurningMotorGearRatio = 1 / 18.0;
+        public static final double kTurningMotorGearRatio = 40 / 48;
         public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
         public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI;
         public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
@@ -64,10 +64,17 @@ public final class Constants {
         public static final boolean kFrontRightDriveAbsoluteEncoderReversed = false;
         public static final boolean kBackRightDriveAbsoluteEncoderReversed = false;
 
-        public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = 0.00; //-0.254;
-        public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = 0.00; //-1.252;
-        public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = 0.00; //-1.816;
-        public static final double kBackRightDriveAbsoluteEncoderOffsetRad = 0.00;//-4.811;
+        //  (straight position value / full rotation value = percent off) * 2pi * -1 = 
+
+        public static final double kfrontLeftStraightWheelRawValue = 1085.00;
+        public static final double kbackLeftStraightWheelRawValue = 2970.00;
+        public static final double kfrontRightStraightWheelRawValue = 3128.00;
+        public static final double kbackRightStraightWheelRawValue = 3571.00;
+
+        public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = ((kfrontLeftStraightWheelRawValue/4096)*(2*Math.PI)*-1);
+        public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = ((kbackLeftStraightWheelRawValue/4096)*(2*Math.PI)*-1);
+        public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = ((kfrontRightStraightWheelRawValue/4096)*(2*Math.PI)*-1);
+        public static final double kBackRightDriveAbsoluteEncoderOffsetRad = ((kbackRightStraightWheelRawValue/4096)*(2*Math.PI)*-1);
 
         public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
