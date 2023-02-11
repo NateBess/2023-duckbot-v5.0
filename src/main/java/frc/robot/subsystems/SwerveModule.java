@@ -46,7 +46,6 @@ public class SwerveModule {
 
         driveEncoder.setPositionConversionFactor(ModuleConstants.kDriveEncoderRot2Meter);
         driveEncoder.setVelocityConversionFactor(ModuleConstants.kDriveEncoderRPM2MeterPerSec);
-        absoluteEncoderReal.getAccumulatorCount();
         // absoluteEncoderReal.setPositionConversionFactor(ModuleConstants.kTurningEncoderRot2Rad);
         // absoluteEncoderReal.setVelocityConversionFactor(ModuleConstants.kTurningEncoderRPM2RadPerSec);
 
@@ -74,6 +73,7 @@ public class SwerveModule {
 
     public double getAbsoluteEncoderRad() {
         double angle = absoluteEncoderReal.getVoltage() / RobotController.getVoltage5V();
+        // SmartDashboard.putNumber("Swerve[" + absoluteEncoderReal.getChannel(), angle);
         angle *= 2.0 * Math.PI;
         angle -= absoluteEncoderOffsetRad;
         return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
@@ -85,12 +85,13 @@ public class SwerveModule {
     }
 
     public SwerveModuleState getState() {
-        return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition()));
+        return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAbsoluteEncoderRad()));
     }
 
+    // Make sure you're getting the correct turning position. Has it been corrected yet?
     public SwerveModulePosition getModulePosition() {
         // put the current angle of the wheel inside .fromDegrees(0);
-        return new SwerveModulePosition(driveEncoder.getPosition(), Rotation2d.fromDegrees(0));
+        return new SwerveModulePosition(getDriveVelocity(), new Rotation2d(getAbsoluteEncoderRad()));
     }
 
     public void setDesiredState(SwerveModuleState state) {
@@ -101,7 +102,7 @@ public class SwerveModule {
         state = SwerveModuleState.optimize(state, getState().angle);
         driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
         turningMotor.set(turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
-        SmartDashboard.putString("Swerve[" + absoluteEncoderReal.getChannel() + "] state", state.toString());
+        SmartDashboard.putNumber("Swerve[" + absoluteEncoderReal.getChannel() + "] state", state.angle.getRadians());
     }
 
     public void stop() {

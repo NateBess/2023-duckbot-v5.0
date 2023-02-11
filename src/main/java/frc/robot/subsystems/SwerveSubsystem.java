@@ -4,9 +4,8 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 // import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+// import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -108,6 +107,11 @@ public class SwerveSubsystem extends SubsystemBase {
             backLeft.getModulePosition(),
             backRight.getModulePosition()
           });
+        SmartDashboard.putNumber("Front Left Absolute Encoder Angle", frontLeft.getAbsoluteEncoderRad());
+        SmartDashboard.putNumber("Back Left Absolute Encoder Angle", backLeft.getAbsoluteEncoderRad());
+        SmartDashboard.putNumber("Front Right Absolute Encoder Angle", frontRight.getAbsoluteEncoderRad());
+        SmartDashboard.putNumber("Back Right Absolute Encoder Angle", backRight.getAbsoluteEncoderRad());
+
         SmartDashboard.putNumber("Front Left Absolute Encoder", frontLeft.getTurningPosition());
         SmartDashboard.putNumber("Back Left Absolute Encoder", backLeft.getTurningPosition());
         SmartDashboard.putNumber("Front Right Absolute Encoder", frontRight.getTurningPosition());
@@ -124,7 +128,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         // SwerveDriveKinematics.normalizeWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, new ChassisSpeeds(1.0, 3.0, 1.5), getHeading(), getHeading(), getHeading());
+        // SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, new ChassisSpeeds(1.0, 3.0, 1.5), getHeading(), getHeading(), getHeading());
         frontLeft.setDesiredState(desiredStates[0]);
         frontRight.setDesiredState(desiredStates[1]);
         backLeft.setDesiredState(desiredStates[2]);
