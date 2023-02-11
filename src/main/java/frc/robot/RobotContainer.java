@@ -43,7 +43,7 @@ public class RobotContainer {
         // new JoystickButton(driverJoytick, 2).whenPressed(() -> swerveSubsystem.zeroHeading());
         final XboxController xbController = new XboxController(0);
 
-        if (xbController.getAButtonPressed()) {
+        if (xbController.getLeftStickButtonPressed() && xbController.getRightStickButtonPressed()) {
                 swerveSubsystem.zeroHeading();
         }
     }

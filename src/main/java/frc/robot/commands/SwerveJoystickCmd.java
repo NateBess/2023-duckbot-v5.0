@@ -62,10 +62,9 @@ public class SwerveJoystickCmd extends CommandBase {
             // Relative to robot
             chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
         }
+        //
 
         // 5. Convert chassis speeds to individual module states
-
-        // FIXME this chassis speeds
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds); // pass this chassis speed into SwerveSubsystem.java
 
         // 6. Output each module states to wheels
