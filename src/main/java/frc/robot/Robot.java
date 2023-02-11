@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -31,6 +32,9 @@ public class Robot extends TimedRobot {
     private RobotContainer m_robotContainer;
     // private XboxController xbController = new XboxController(0);
     private XboxController xbControllerTwo = new XboxController(1);
+
+    private VictorSP armMotor = new VictorSP(0); // 0 is the RIO PWM port this is connected to
+
 
     // Claw open and close.
     private DoubleSolenoid doubleSolenoidOne = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
@@ -125,15 +129,6 @@ public class Robot extends TimedRobot {
     // This is where you program buttons on the xbox controller...
     @Override
     public void teleopPeriodic() {
-        // Controller One "DRIVER"
-        // if (xbController.getLeftBumperPressed()) {
-        //     doubleSolenoidOne.set(kForward);
-        //   }
-        // if (xbController.getRightBumperPressed()) {
-        //     doubleSolenoidOne.set(kReverse);
-        //   }
-
-        // Controller Two "ARM Controller"
 
         // Claw open / close if statements.
         if (xbControllerTwo.getLeftBumperPressed()) {
@@ -158,7 +153,17 @@ public class Robot extends TimedRobot {
             doubleSolenoidTwo.set(kReverse);
             doubleSolenoidThree.set(kForward);
         }
+
+        if ((xbControllerTwo.getLeftTriggerAxis() > 50) && (xbControllerTwo.getRightStickButtonPressed())) {
+            armMotor.set(-0.20);
         }
+        if ((xbControllerTwo.getRightTriggerAxis() > 50) && (xbControllerTwo.getRightStickButtonPressed())) {
+            armMotor.set(0.20);
+        }
+        if ((xbControllerTwo.getRightTriggerAxis() < 50) && (xbControllerTwo.getLeftTriggerAxis() < 50)) {
+            armMotor.set(0.00);
+        }
+    }
 
     @Override
     public void testInit() {
