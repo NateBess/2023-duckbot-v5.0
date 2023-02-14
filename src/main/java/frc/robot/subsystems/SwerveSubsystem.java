@@ -2,76 +2,73 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-// import edu.wpi.first.math.kinematics.ChassisSpeeds;
-// import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.SwerveJoystick;
+import frc.robot.Constants.*;
 
-public class SwerveSubsystem extends SubsystemBase {
-
-    public final SwerveModule frontLeft = new SwerveModule(
+public class swerveSubsystem extends SubsystemBase{
+    private final SwerveModule frontLeft = new SwerveModule(
             DriveConstants.kFrontLeftDriveMotorPort,
             DriveConstants.kFrontLeftTurningMotorPort,
             DriveConstants.kFrontLeftDriveEncoderReversed,
             DriveConstants.kFrontLeftTurningEncoderReversed,
             DriveConstants.kFrontLeftDriveAbsoluteEncoderPort,
-            DriveConstants.kFrontLeftDriveAbsoluteEncoderOffsetRad,
+            DriveConstants.kFrontLeftDriveAbsoluteEncoderOffsetDegrees,
             DriveConstants.kFrontLeftDriveAbsoluteEncoderReversed);
 
-    public final SwerveModule frontRight = new SwerveModule(
+    private final SwerveModule frontRight = new SwerveModule(
             DriveConstants.kFrontRightDriveMotorPort,
             DriveConstants.kFrontRightTurningMotorPort,
             DriveConstants.kFrontRightDriveEncoderReversed,
             DriveConstants.kFrontRightTurningEncoderReversed,
             DriveConstants.kFrontRightDriveAbsoluteEncoderPort,
-            DriveConstants.kFrontRightDriveAbsoluteEncoderOffsetRad,
+            DriveConstants.kFrontRightDriveAbsoluteEncoderOffsetDegrees,
             DriveConstants.kFrontRightDriveAbsoluteEncoderReversed);
 
-    public final SwerveModule backLeft = new SwerveModule(
+    private final SwerveModule backLeft = new SwerveModule(
             DriveConstants.kBackLeftDriveMotorPort,
             DriveConstants.kBackLeftTurningMotorPort,
             DriveConstants.kBackLeftDriveEncoderReversed,
             DriveConstants.kBackLeftTurningEncoderReversed,
             DriveConstants.kBackLeftDriveAbsoluteEncoderPort,
-            DriveConstants.kBackLeftDriveAbsoluteEncoderOffsetRad,
+            DriveConstants.kBackLeftDriveAbsoluteEncoderOffsetDegrees,
             DriveConstants.kBackLeftDriveAbsoluteEncoderReversed);
 
-    public final SwerveModule backRight = new SwerveModule(
+    private final SwerveModule backRight = new SwerveModule(
             DriveConstants.kBackRightDriveMotorPort,
             DriveConstants.kBackRightTurningMotorPort,
             DriveConstants.kBackRightDriveEncoderReversed,
             DriveConstants.kBackRightTurningEncoderReversed,
             DriveConstants.kBackRightDriveAbsoluteEncoderPort,
-            DriveConstants.kBackRightDriveAbsoluteEncoderOffsetRad,
+            DriveConstants.kBackRightDriveAbsoluteEncoderOffsetDegrees,
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
 
+    public final SwerveModulePosition[] swervePos = new SwerveModulePosition[] {frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()};
+
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+    private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, new Rotation2d(0), swervePos);
 
-    private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
-            new Rotation2d(0), new SwerveModulePosition[] {
-                frontLeft.getModulePosition(),
-                frontRight.getModulePosition(),
-                backLeft.getModulePosition(),
-                backRight.getModulePosition()
-              });
-
-    public SwerveSubsystem() {
+    public void SwerveSubsystem() {
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
                 zeroHeading();
             } catch (Exception e) {
+
             }
         }).start();
     }
 
-    public void zeroHeading() {
+    private void zeroHeading() {
         gyro.reset();
     }
 
@@ -87,55 +84,35 @@ public class SwerveSubsystem extends SubsystemBase {
         return odometer.getPoseMeters();
     }
 
-    public void resetOdometry(Pose2d pose) {
-        // odometer.resetPosition(pose, getRotation2d());
-        odometer.resetPosition(getRotation2d(), new SwerveModulePosition[] {
-            frontLeft.getModulePosition(),
-            frontRight.getModulePosition(),
-            backLeft.getModulePosition(),
-            backRight.getModulePosition()
-          }, pose);
+    public void resetOdometer(Pose2d pose) {
+        odometer.resetPosition(getRotation2d(), swervePos, pose);
     }
 
-    @Override
+    @Override 
     public void periodic() {
-        // odometer.update(getRotation2d(), frontLeft.getState(), frontRight.getState(), backLeft.getState(),
-        //         backRight.getState());
-        odometer.update(getRotation2d(), new SwerveModulePosition[] {
-            frontLeft.getModulePosition(),
-            frontRight.getModulePosition(),
-            backLeft.getModulePosition(),
-            backRight.getModulePosition()
-          });
-        SmartDashboard.putNumber("Front Left Absolute Encoder Angle", frontLeft.getAbsoluteEncoderRad());
-        SmartDashboard.putNumber("Back Left Absolute Encoder Angle", backLeft.getAbsoluteEncoderRad());
-        SmartDashboard.putNumber("Front Right Absolute Encoder Angle", frontRight.getAbsoluteEncoderRad());
-        SmartDashboard.putNumber("Back Right Absolute Encoder Angle", backRight.getAbsoluteEncoderRad());
+        odometer.update(getRotation2d(), swervePos);
+        SmartDashboard.putNumber("BackLeft Turning Angle", (backLeft.getTurningPosition()));
+        SmartDashboard.putNumber("BackRight Turning Angle", (backRight.getTurningPosition()));
+        SmartDashboard.putNumber("FrontLeft Turning Angle", (frontLeft.getTurningPosition()));
+        SmartDashboard.putNumber("FrontRight Turning Angle", (frontRight.getTurningPosition()));
 
-        SmartDashboard.putNumber("Front Left Absolute Encoder", frontLeft.getTurningPosition());
-        SmartDashboard.putNumber("Back Left Absolute Encoder", backLeft.getTurningPosition());
-        SmartDashboard.putNumber("Front Right Absolute Encoder", frontRight.getTurningPosition());
-        SmartDashboard.putNumber("Back Right Absolute Encoder", backRight.getTurningPosition());
-
+        SmartDashboard.putNumber("BackLeft Offset Degree", DriveConstants.kBackLeftDriveAbsoluteEncoderOffsetDegrees);
+        SmartDashboard.putNumber("BackRight Offset Degree", DriveConstants.kBackRightDriveAbsoluteEncoderOffsetDegrees);
+        SmartDashboard.putNumber("FrontLeft Offset Degree", DriveConstants.kFrontLeftDriveAbsoluteEncoderOffsetDegrees);
+        SmartDashboard.putNumber("FrontRight Offset Degree", DriveConstants.kFrontRightDriveAbsoluteEncoderOffsetDegrees);
     }
 
-    public void stopModules() {
+    public void stopModule() {
         frontLeft.stop();
         frontRight.stop();
         backLeft.stop();
         backRight.stop();
     }
 
-    public void setModuleStates(SwerveModuleState[] desiredStates) {
-        // SwerveDriveKinematics.normalizeWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
-        // SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, new ChassisSpeeds(1.0, 3.0, 1.5), getHeading(), getHeading(), getHeading());
-        frontLeft.setDesiredState(desiredStates[0]);
-        frontRight.setDesiredState(desiredStates[1]);
-        backLeft.setDesiredState(desiredStates[2]);
-        backRight.setDesiredState(desiredStates[3]);
+    public void setModuleStates(SwerveModuleState[] dersiredStates) {
+        frontLeft.setDesiredState(dersiredStates[0]);
+        frontRight.setDesiredState(dersiredStates[1]);
+        backLeft.setDesiredState(dersiredStates[2]);
+        backRight.setDesiredState(dersiredStates[3]);
     }
 }
-
-
-
-//make a new method that takes in chassis speeds and at the end use normalize wheel speeds

@@ -1,0 +1,40 @@
+<xml version="1.0">
+<dashboard>
+	<widget field="Drive TurningSpeed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="6" y="379"/>
+	</widget>
+	<widget field="Drive ySpeed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="16" y="354"/>
+	</widget>
+	<widget field="Drive xSpeed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="17" y="332"/>
+	</widget>
+	<widget field="FrontRight Offset Degree" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="213" y="189"/>
+	</widget>
+	<widget field="FrontLeft Offset Degree" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="5" y="190"/>
+	</widget>
+	<widget field="BackRight Offset Degree" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="215" y="216"/>
+	</widget>
+	<widget field="BackLeft Offset Degree" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="9" y="214"/>
+	</widget>
+	<widget field="FrontRight Turning Angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="214" y="100"/>
+	</widget>
+	<widget field="FrontLeft Turning Angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="5" y="100"/>
+	</widget>
+	<widget field="BackRight Turning Angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="213" y="127"/>
+	</widget>
+	<widget field="BackLeft Turning Angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="6" y="128"/>
+	</widget>
+</dashboard>
+<live-window>
+</live-window>
+	<hidden field="front right raw position"/>
+</xml>
